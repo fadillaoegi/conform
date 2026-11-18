@@ -1,0 +1,69 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build & Compiler Outputs
+dist/
+dist-ssr/
+build/
+out/
+*.tsbuildinfo
+.vite/
+vite.config.ts.timestamp-*
+vite.config.js.timestamp-*
+
+# Generated & Runtime Project Files
+apps/server/data/
+apps/web/public/runtime/
+apps/web/public/agent-manifest.json
+apps/web/public/conform.network.json
+apps/web/public/conform_check.network.json
+apps/web/public/agent-mcp.json
+apps/web/public/.well-known/
+apps/web/public/bridge/
+apps/web/agent/generated/
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Logs & Diagnostics
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Testing & Coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# Temporary & Cache
+.tmp/
+tmp/
+temp/
+.cache/
+*.tgz
+
+# OS Metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+Desktop.ini
+
+# Editors & IDEs
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+*~
+

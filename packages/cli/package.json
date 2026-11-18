@@ -1,0 +1,30 @@
+{
+  "name": "agentic-web-conformance",
+  "version": "0.1.0",
+  "description": "Check an Open Agentic Web site against the Worldwide Agentic Web MVP specification: `conform check <url>`.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "conform": "./dist/bin.js"
+  },
+  "exports": {
+    ".": {
+      "conform-source": "./src/run.ts",
+      "types": "./dist/run.d.ts",
+      "default": "./dist/run.js"
+    }
+  },
+  "files": ["dist"],
+  "engines": {
+    "node": ">=24"
+  },
+  "keywords": ["agentic-web", "conformance", "neuro-san", "nsdeploy", "mcp", "cors", "cli"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --conditions=conform-source --test \"test/**/*.test.ts\""
+  },
+  "dependencies": {
+    "@conform/core": "workspace:*"
+  }
+}

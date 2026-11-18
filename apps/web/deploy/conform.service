@@ -1,0 +1,31 @@
+# systemd unit for the Conform service without Docker. Install Node 24 and pnpm 11, put the repository
+# in /opt/conform, build once (CONFORM_PUBLIC_ORIGIN=https://<domain> pnpm --filter @conform/web build),
+# then: sudo cp apps/web/deploy/conform.service /etc/systemd/system/ && sudo systemctl enable --now conform
+[Unit]
+Description=Conform conformance checker (site, badges, directory, MCP)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=conform
+Group=conform
+WorkingDirectory=/opt/conform
+Environment=CONFORM_ENV=production
+Environment=CONFORM_PUBLIC_ORIGIN=https://conform.your-domain.tld
+Environment=CONFORM_SIGNING_KEY_FILE=/etc/conform/badge-signing-key.pem
+Environment=CONFORM_DATA_DIR=/var/lib/conform
+Environment=CONFORM_STATIC_DIR=/opt/conform/apps/web/dist
+Environment=CONFORM_HOST=127.0.0.1
+Environment=CONFORM_PORT=8787
+Environment=CONFORM_TRUST_PROXY=1
+ExecStart=/usr/bin/env node --conditions=conform-source apps/server/src/main.ts
+Restart=on-failure
+StateDirectory=conform
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/conform
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

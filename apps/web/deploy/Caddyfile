@@ -1,0 +1,9 @@
+# Caddy 2 in front of the Conform service (TLS + reverse proxy). The service itself sends every
+# header the spec needs (CORS on public agent files only, .mjs types, the worker and page CSPs).
+#   CONFORM_SITE_ADDRESS  the domain, for example conform.your-domain.tld (automatic HTTPS)
+#   CONFORM_UPSTREAM      where the service listens, for example 127.0.0.1:8787 or conform:8787
+{$CONFORM_SITE_ADDRESS} {
+	encode zstd gzip
+	reverse_proxy {$CONFORM_UPSTREAM}
+	header -Server
+}

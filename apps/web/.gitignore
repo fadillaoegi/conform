@@ -1,0 +1,11 @@
+dist/
+# Generated at build time from agent/ and packages/reference-runtime (see scripts/).
+public/runtime/
+public/agent-manifest.json
+public/conform.network.json
+public/conform_check.network.json
+public/agent-mcp.json
+public/.well-known/
+public/bridge/
+agent/generated/
+deploy/.env

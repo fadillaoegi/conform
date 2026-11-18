@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Conform · conformance checker for the open agentic web</title>
+    <meta name="description" content="Check an agentic website against the Worldwide Agentic Web MVP specification: public agent files, CORS, exact-name resolution, fail-closed limits and peer policy, with evidence and fixes.">
+    <meta name="theme-color" content="#1a1c2c">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip" href="#url">Skip to the checker</a>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Conform home"><span class="brand-mark" data-logo></span><span class="brand-name">CONFORM</span></a>
+      <nav aria-label="Sections">
+        <a href="#checker">Checker</a>
+        <a href="#directory">Directory</a>
+        <a href="#assistant">Assistant</a>
+        <a href="#catalog">Checks</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="checker" class="hero px-box" aria-labelledby="hero-title">
+        <p class="eyebrow">Open Agentic Web · MVP Profile 0.2</p>
+        <h1 id="hero-title">Does your agentic site <span class="hl">speak the spec?</span></h1>
+        <p class="lede">Paste a network URL. Conform reads the site's public agent files the way another site's browser would, runs the spec's fail-closed checks in the reference runtime, and tells you exactly what to fix. No AI model, no key, nothing stored.</p>
+        <form id="check-form" class="check-form" novalidate>
+          <label for="url" class="px-label">Network URL</label>
+          <div class="input-row">
+            <input id="url" name="url" type="url" inputmode="url" autocomplete="url" spellcheck="false" required
+                   placeholder="https://site.example/agents/transit" aria-describedby="url-hint form-error">
+            <button type="submit" class="px-btn px-btn-go" id="run"><span aria-hidden="true">▶</span> Run check</button>
+          </div>
+          <p id="url-hint" class="hint">The folder that holds <code>agent-manifest.json</code>, then the network name. A site base ending in <code>/</code> checks its first network.</p>
+          <p id="form-error" class="form-error" role="alert"></p>
+          <div class="quick">
+            <span class="hint">Try:</span>
+            <button type="button" class="px-chip" id="try-self">Conform itself</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="progress" class="px-box progress" aria-labelledby="progress-title" hidden>
+        <h2 id="progress-title" class="px-h2">Run</h2>
+        <ol class="hp" id="hp"></ol>
+        <p class="hint" id="progress-text" aria-live="polite"></p>
+      </section>
+
+      <section id="report" class="report" aria-labelledby="report-title" hidden>
+        <div class="px-box scoreboard">
+          <div class="stamp" id="stamp" aria-hidden="true"></div>
+          <div class="score-main">
+            <h2 id="report-title" class="px-h2">Report</h2>
+            <p class="target" id="report-target"></p>
+            <p class="hint" id="report-meta"></p>
+            <ul class="counters" id="counters"></ul>
+          </div>
+        </div>
+        <div class="report-tools">
+          <label class="px-toggle"><input type="checkbox" id="only-problems"> Only problems</label>
+          <label class="px-toggle"><input type="checkbox" id="show-evidence"> Evidence</label>
+          <button type="button" class="px-btn px-btn-small" id="copy-link">Copy link</button>
+          <button type="button" class="px-btn px-btn-small" id="download-json">Download JSON</button>
+          <span class="hint" id="tool-status" role="status"></span>
+        </div>
+        <div id="checks-list" class="checks-list"></div>
+        <p class="hint not-yet" id="not-yet"></p>
+        <div id="badge-panel" class="px-box badge-panel" aria-live="polite" hidden></div>
+      </section>
+
+      <section id="verify" class="px-box verify" aria-labelledby="verify-title" hidden>
+        <h2 id="verify-title" class="px-h2">Badge</h2>
+        <div id="verify-body"></div>
+      </section>
+
+      <section id="assistant" class="assistant console px-box" aria-labelledby="assistant-heading">
+        <div class="console-bar">
+          <h2 id="assistant-heading" class="px-h2">Ask Conform</h2>
+          <span class="console-led" aria-hidden="true"></span>
+        </div>
+        <p>Ask what a result means, how to fix it, or ask the assistant to check a site for you.</p>
+        <p class="assistant-note">Your messages and this page's report go to the LLM provider you choose in the settings below. Before the assistant contacts any site, your browser asks you to confirm.</p>
+        <p id="assistant-status" role="status">Connecting the assistant… If this message stays, the assistant could not load. You can still use the checker directly.</p>
+        <div class="screen">
+          <div id="agent-app">
+            <div data-ns-slot="header"></div>
+            <div class="assistant-panels">
+              <div data-ns-slot="chat"></div>
+              <div data-ns-slot="agents"></div>
+            </div>
+            <div data-ns-slot="settings"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="directory" class="px-box directory" aria-labelledby="directory-title" hidden>
+        <h2 id="directory-title" class="px-h2">Directory</h2>
+        <p class="hint">Agentic sites with a signed Conform badge. Each badge is bound to the site's current files; a badge turns stale when they change.</p>
+        <label class="px-label dir-search-label" for="dir-search">Search by name, capability or URL</label>
+        <input id="dir-search" class="dir-search" type="search" autocomplete="off" spellcheck="false" placeholder="booking, tours, pizza…">
+        <ul id="dir-list" class="dir-list"></ul>
+        <p id="dir-empty" class="hint" hidden></p>
+      </section>
+
+      <section id="catalog" class="px-box catalog" aria-labelledby="catalog-title">
+        <h2 id="catalog-title" class="px-h2">Checks</h2>
+        <p class="hint">Every check maps sentences of the spec to a test with evidence. Static checks read public files; harness checks load the site's real files into the pinned reference runtime.</p>
+        <div class="table-wrap"><table id="catalog-table"><thead><tr><th scope="col">ID</th><th scope="col">Check</th><th scope="col">Spec</th><th scope="col">Mode</th><th scope="col">Status</th></tr></thead><tbody></tbody></table></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p id="binding"></p>
+      <p>Open source under Apache-2.0. Conform is itself an agentic website: its <a href="/agent-manifest.json">agent-manifest.json</a> publishes the <code>conform</code> network.</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "@conform/reference-runtime",
+  "version": "0.0.0-nsdeploy.53a787c",
+  "private": true,
+  "description": "Pinned copy of the agentic-web skill's browser runtime (nsdeploy 53a787c + skill edits), used by Conform's harness checks.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    "./runtime/*": "./runtime/*",
+    "./skill/*": "./skill/*"
+  },
+  "files": [
+    "runtime",
+    "skill",
+    "HASHES.sha256",
+    "UPSTREAM.md"
+  ]
+}

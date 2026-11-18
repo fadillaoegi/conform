@@ -1,0 +1,40 @@
+# Conform on a VPS with Docker: Caddy (automatic HTTPS) in front of the Conform service.
+#   cp deploy/.env.example deploy/.env   # then edit it
+#   docker compose -f apps/web/deploy/docker-compose.yml --env-file apps/web/deploy/.env up -d --build
+services:
+  conform:
+    build:
+      context: ../../..
+      args:
+        CONFORM_PUBLIC_ORIGIN: https://${CONFORM_DOMAIN}
+    environment:
+      CONFORM_ENV: ${CONFORM_ENV:-production}
+      CONFORM_PUBLIC_ORIGIN: https://${CONFORM_DOMAIN}
+      CONFORM_SIGNING_KEY_FILE: /run/secrets/conform_signing_key
+    secrets:
+      - conform_signing_key
+    volumes:
+      - conform_data:/var/lib/conform
+    restart: unless-stopped
+  caddy:
+    image: caddy:2-alpine
+    depends_on:
+      - conform
+    ports:
+      - "${CONFORM_HTTP_PORT:-80}:80"
+      - "${CONFORM_HTTPS_PORT:-443}:443"
+    environment:
+      CONFORM_SITE_ADDRESS: ${CONFORM_SITE_ADDRESS:-${CONFORM_DOMAIN}}
+      CONFORM_UPSTREAM: conform:8787
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+secrets:
+  conform_signing_key:
+    file: ${CONFORM_SIGNING_KEY_HOST_PATH}
+volumes:
+  conform_data:
+  caddy_data:
+  caddy_config:

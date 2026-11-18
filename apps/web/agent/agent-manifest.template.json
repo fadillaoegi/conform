@@ -1,0 +1,104 @@
+{
+  "brand": "Conform",
+  "networks": [
+    {
+      "name": "conform",
+      "front_man": "conform_guide",
+      "hocon": "./conform.network.json",
+      "description": "Check an agentic website against the Worldwide Agentic Web MVP spec, then ask what each result means and how to fix it.",
+      "tags": [
+        "conformance",
+        "agentified-website"
+      ],
+      "sample_queries": [
+        "What does Conform check, and which spec sections does it cover?",
+        "Check https://example.org/agents/assistant for me.",
+        "Why did C2.4 fail in my report, and how do I fix it?",
+        "Can you fix my site's manifest for me?"
+      ]
+    },
+    {
+      "name": "conform_check",
+      "front_man": "conform_checker",
+      "hocon": "./conform_check.network.json",
+      "description": "For other agentic sites: ask whether a site follows the Worldwide Agentic Web MVP spec, get its signed badge status, or what a check means.",
+      "tags": [
+        "conformance",
+        "mcp"
+      ],
+      "sample_queries": [
+        "Is https://example.org/agents/assistant conformant before I call it?",
+        "Does https://example.org/agents/assistant have a valid Conform badge?",
+        "What does check C7 prove?"
+      ]
+    }
+  ],
+  "llm_router": {
+    "base_url": "https://api.otari.ai/api/v1",
+    "mock": false,
+    "byok_router": "https://api.otari.ai/api/v1"
+  },
+  "allowed_peers": [
+    "{{PUBLIC_ORIGIN}}"
+  ],
+  "peer_policy": {
+    "mode": "closed",
+    "deny_origins": [],
+    "note": "Checking a site contacts it only after the visitor confirms. The conform_check network calls Conform's own MCP endpoint on this origin."
+  },
+  "agent_mcp": {
+    "protocol": "nsdeploy-agent-mcp/v1",
+    "network": "conform",
+    "front_man": "conform_guide",
+    "available": false,
+    "reason": "This is a static bundle; a public MCP facade requires an application host."
+  },
+  "theme": {
+    "primary": "#29366f"
+  },
+  "linking": {
+    "protocol": "nsdeploy-link/v1",
+    "exports": [
+      {
+        "network": "conform",
+        "front_man": "conform_guide",
+        "aliases": [
+          "conform",
+          "conform_guide"
+        ],
+        "url": "conform"
+      },
+      {
+        "network": "conform_check",
+        "front_man": "conform_checker",
+        "aliases": [
+          "conform_check",
+          "conform_checker"
+        ],
+        "url": "conform_check"
+      }
+    ],
+    "imports": [],
+    "link_updates": {
+      "mode": "browser-local"
+    }
+  },
+  "deployment": {
+    "mode": "static",
+    "self_contained_runtime": true,
+    "browser_mock": false,
+    "direct_byok": true,
+    "direct_mcp_requires_cors": true,
+    "public_mcp_facade": false
+  },
+  "actions": {
+    "version": 1,
+    "module": "./site-actions.js",
+    "bridge": "./bridge/action-bridge.html",
+    "agentTools": [
+      "get_page_state",
+      "check_site",
+      "explain_check"
+    ]
+  }
+}

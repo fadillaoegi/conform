@@ -1,0 +1,27 @@
+{
+  "name": "@conform/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The Conform site: a pixel-themed conformance checker for Open Agentic Web sites, itself an agentic website with Conform's own agent network.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "sync-runtime": "node scripts/sync-runtime.mjs",
+    "build-network": "node scripts/render-agent.mjs",
+    "check-network": "node scripts/render-agent.mjs --check",
+    "dev": "pnpm run sync-runtime && pnpm run build-network && vite",
+    "build": "pnpm run sync-runtime && pnpm run build-network && vite build",
+    "serve": "node ../../fixtures/upstream/serve_site.mjs dist --port 8095",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --conditions=conform-source --test \"test/**/*.test.ts\""
+  },
+  "dependencies": {
+    "@conform/core": "workspace:*",
+    "@fontsource/pixelify-sans": "^5.3.0",
+    "@fontsource/press-start-2p": "^5.3.0"
+  },
+  "devDependencies": {
+    "@conform/reference-runtime": "workspace:*",
+    "vite": "~7.3.8"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@conform/core",
+  "version": "0.1.0",
+  "description": "Conformance checks for Open Agentic Web (Worldwide Agentic Web MVP) sites: static artifact checks and reference-runtime harness checks. No DOM, no LLM.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "conform-source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && cp src/reference-runtime.d.ts dist/reference-runtime.d.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test \"test/**/*.test.ts\""
+  },
+  "dependencies": {
+    "@conform/reference-runtime": "workspace:*"
+  }
+}

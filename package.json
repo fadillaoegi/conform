@@ -1,0 +1,25 @@
+{
+  "name": "conform-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Conform: conformance checker, badge and agent for the Open Agentic Web MVP specification.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "packageManager": "pnpm@11.1.3",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "pnpm -r run build",
+    "test": "pnpm -r --workspace-concurrency=1 run test",
+    "typecheck": "pnpm -r run typecheck",
+    "conform": "node --conditions=conform-source packages/cli/src/bin.ts",
+    "dev:server": "node --conditions=conform-source apps/server/src/main.ts",
+    "dev:web": "pnpm --filter @conform/web dev",
+    "serve": "pnpm --filter @conform/web build && node --conditions=conform-source apps/server/src/main.ts --static apps/web/dist"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,10 @@
+**/node_modules
+**/dist
+.git
+.env
+.env.*
+apps/server/data
+apps/web/public/runtime
+apps/web/agent/generated
+**/*.pem
+**/.DS_Store
