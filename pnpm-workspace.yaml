@@ -2,5 +2,6 @@ packages:
   - packages/*
   - apps/*
   - action
+  - submission/video
 allowBuilds:
   esbuild: true

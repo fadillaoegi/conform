@@ -2,6 +2,40 @@
 
 Deadline: 11 January 2027, 16:00 UTC (23:00 WIB). Target submission: 10 January, 21:00 WIB.
 
+## 2026-11-18 — session 7: video intro and closing
+
+- `submission/`: `intro.mp4` and `outro.mp4` (8 s each, 1080p30, AAC stereo), rendered with Remotion 4.0.539
+  from `submission/video` (CSS 3D voxels lit per face from the camera rotation, pixel starfield, perspective
+  grid). The story follows the logo: the cube assembles, the keystone locks; in the closing C1–C9 light up.
+- All sound is synthesized (`scripts/make-audio.mjs`) from the shared timeline: no third-party music,
+  samples or brands, as the rules require. Key stills in `submission/stills/`.
+- The closing can show the site's address once it is live (`CONFORM_URL=... pnpm render:outro:url`).
+
+## 2026-11-18 — session 6: logo, live assistant test with a real model
+
+- Logo "The Keystone" (voxel pixel art, `apps/web/scripts/make-logo.mjs`, `docs/brand/LOGO.md`); used as header and favicon.
+- The user tested the site locally (`pnpm serve`) with their own Otari key and `alibaba/qwen3.8-flash`.
+  Checker, JSON report, consent dialog and decline: correct. Report fixes: harness URLs normalized
+  (no "./"), C7–C9 durations now include their scripted turns.
+- Assistant findings and fixes (each re-tested by the user):
+  1. "What does Conform check?": accurate.
+  2. Check a site: the tool call and consent dialog work; after a decline the model speculated that http
+     URLs may be blocked, from an over-broad limit sentence. Replaced with facts (see 4).
+  3. "Why would C2.4 fail?": the model guessed causes because explain_check returned only a one-line summary.
+     Added per-finding guides (`FINDING_GUIDE` in core, shared by the site, MCP and CLI), a ready-made
+     `explanation` text in the tool result, and a rule to call the tool before explaining. Now correct in
+     substance; the small model still softens the exact rule ("first agent with instructions in tools[]").
+  4. "Can you fix my manifest?": honest refusal with useful alternatives; it still claimed plain-http URLs
+     cannot be checked, inferred from report text. `website_get_page_state` now states the real URL rules
+     (`urlRules`, based on where Conform runs) and the URL format with an example.
+- Open: compare with a larger model on Otari before choosing the default model for the demo.
+- First real-web check (once, polite): the organizers' listed site https://worldwideagenticweb.org has no
+  agent-manifest.json at its root; at the widget folder
+  `…/wwaw-agent-widget/assets/worldwide_agentic_web_widget/v1.0.9/` the manifest, network and links.json are
+  served **without Access-Control-Allow-Origin** (confirmed with curl, Cloudflare in front), so another site's
+  browser cannot load the network (spec §3.2 MVP boundary, §3.3, §3.4). C3–C9 pass in Node, which does not
+  enforce CORS. Candidate for a friendly upstream issue; the user decides.
+
 ## 2026-11-17 — session 5: Clean Architecture for the service
 
 The user asked for Clean Architecture. `apps/server` was restructured into `domain/` (pure badge and

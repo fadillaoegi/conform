@@ -22,7 +22,7 @@ const ALLOWED: Record<Layer, Layer[]> = {
 const NODE_OK: Record<Layer, boolean> = { domain: false, application: false, infrastructure: true, interface: true, main: true };
 // Pure, I/O-free exports of @conform/core that inner layers may use at run time. checkNetwork (which
 // does network I/O) is reachable only from infrastructure.
-const CORE_PURE = new Set(["canonicalJson", "compactReport", "compactText", "checkInfo", "CATALOG", "parseInput", "CONFORM_VERSION", "SPEC", "RUNTIME"]);
+const CORE_PURE = new Set(["canonicalJson", "compactReport", "compactText", "checkInfo", "findingGuides", "FINDING_GUIDE", "CATALOG", "parseInput", "CONFORM_VERSION", "SPEC", "RUNTIME"]);
 
 async function files(dir: string): Promise<string[]> {
   const out: string[] = [];

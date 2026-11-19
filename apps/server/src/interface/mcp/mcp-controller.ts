@@ -72,9 +72,12 @@ async function callTool(app: App, name: unknown, args: Record<string, unknown>):
       return result(summary, { id: badge.id, state: badge.state, result: badge.payload.result, network: badge.payload.network, issuedAt: badge.payload.issuedAt, expiresAt: badge.payload.expiresAt, links: badge.links });
     }
     if (name === "explain_check") {
-      const info = app.explainCheck.execute(args["id"]);
-      if (!info) return result(`"${String(args["id"])}" is not a Conform check id. Use C1 to C14, or a finding id such as C2.4.`, undefined, true);
-      return result(`${info.id} ${info.name} (${info.automated ? "automated" : "planned"}; spec ${info.spec.join(", ")}): ${info.proves}`, info);
+      const explained = app.explainCheck.execute(args["id"]);
+      if (!explained) return result(`"${String(args["id"])}" is not a Conform check id. Use C1 to C14, or a finding id such as C2.4.`, undefined, true);
+      const info = explained.check;
+      const lines = [`${info.id} ${info.name} (${info.automated ? "automated" : "planned"}; spec ${info.spec.join(", ")}): ${info.proves}`];
+      for (const g of explained.guides) lines.push(`${g.id} fails when: ${g.why} Fix: ${g.fix}`);
+      return result(lines.join("\n"), explained);
     }
     return result(`Unknown tool ${String(name)}.`, undefined, true);
   } catch (error) {

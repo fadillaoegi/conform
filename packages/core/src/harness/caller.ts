@@ -101,7 +101,9 @@ export async function startHarness(options: HarnessOptions): Promise<Harness> {
   const requests: RecordedRequest[] = [];
 
   const stub: FetchLike = async (input, init) => {
-    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+    const raw = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+    // Record the URL as a browser sends it ("./" segments resolved).
+    const url = new URL(raw).href;
     const method = init?.method ?? "GET";
     const origin = new URL(url).origin;
     const record: RecordedRequest = {

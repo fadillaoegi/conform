@@ -6,5 +6,10 @@
 apps/server/data
 apps/web/public/runtime
 apps/web/agent/generated
+submission/*.mp4
+submission/stills
+submission/video/public
 **/*.pem
+**/*.key
 **/.DS_Store
+

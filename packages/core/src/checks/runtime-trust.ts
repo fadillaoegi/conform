@@ -209,12 +209,20 @@ export async function checkRuntimeTrust(
 ): Promise<RuntimeTrustChecks> {
   const base = { targetBase: target.siteBase, targetName: entry.name, targetManifest: manifest };
   const withFetch = fetchImpl ? { fetch: fetchImpl } : {};
-  const allow = await runScriptedTurn({ ...base, ...withFetch, consent: "allow" });
-  const decline = await runScriptedTurn({ ...base, ...withFetch, consent: "decline" });
-  const extra = await runScriptedTurn({ ...base, ...withFetch, consent: "allow", allowField: true, peerRouterOverride: true });
-  return {
-    c7: checkKey(allow, extra),
-    c8: checkPrivate(allow, extra, definition),
-    c9: await checkConsent(allow, decline, target, fetchOptions),
+  const timed = async (options: Parameters<typeof runScriptedTurn>[0]): Promise<[TurnResult, number]> => {
+    const started = performance.now();
+    const turn = await runScriptedTurn(options);
+    return [turn, Math.round(performance.now() - started)];
   };
+  const [allow, tAllow] = await timed({ ...base, ...withFetch, consent: "allow" });
+  const [decline, tDecline] = await timed({ ...base, ...withFetch, consent: "decline" });
+  const [extra, tExtra] = await timed({ ...base, ...withFetch, consent: "allow", allowField: true, peerRouterOverride: true });
+  // The three turns are shared: each check's duration includes the turns its findings rely on.
+  const c7 = checkKey(allow, extra);
+  c7.durationMs += tAllow + tExtra;
+  const c8 = checkPrivate(allow, extra, definition);
+  c8.durationMs += tAllow + tExtra;
+  const c9 = await checkConsent(allow, decline, target, fetchOptions);
+  c9.durationMs += tAllow + tDecline;
+  return { c7, c8, c9 };
 }

@@ -19,7 +19,7 @@ class SiteActions {
   static getPageState() {
     return {
       name: "get_page_state",
-      description: "Read what the Conform page shows now: the URL in the checker, whether a check is running, the latest report (every check with its status and its fail, warn and untestable findings with fixes), and which checks are automated or planned.",
+      description: "Read what the Conform page shows now: which URLs it can check (urlRules), the URL in the checker, whether a check is running, the latest report (every check with its status and its fail, warn and untestable findings with fixes), and which checks are automated or planned.",
       effect: "read",
       inputSchema: { type: "object", properties: {}, additionalProperties: false },
       execute: () => page().getState(),
@@ -29,7 +29,7 @@ class SiteActions {
   static checkSite() {
     return {
       name: "check_site",
-      description: "Run Conform's automated checks (C1 to C9) against a public agentic website and show the report on the page. Reads only the site's public agent files. The browser asks the visitor to confirm first, because it contacts that site. Returns the compact report, or ok false with a reason.",
+      description: "Run Conform's automated checks (C1 to C9) against an agentic website and show the report on the page. Which URLs work is in website_get_page_state urlRules. Reads only the site's public agent files. The browser asks the visitor to confirm first, because it contacts that site. Returns the compact report, or ok false with a reason.",
       // "irreversible" makes the runtime ask before the call: contacting another origin cannot be undone.
       effect: "irreversible",
       inputSchema: {
@@ -41,7 +41,7 @@ class SiteActions {
             type: "string",
             minLength: 8,
             maxLength: 2048,
-            description: "The exact URL the visitor gave: a network URL (site folder, then network name), a site base ending in /, or an agent-manifest.json URL.",
+            description: "The exact URL the visitor gave: a network URL (the folder that holds agent-manifest.json, then the network name, such as https://example.org/agents/assistant), a site folder ending in /, or the agent-manifest.json URL itself.",
           },
         },
       },
@@ -52,7 +52,7 @@ class SiteActions {
   static explainCheck() {
     return {
       name: "explain_check",
-      description: "Explain one Conform check or finding id (such as C3 or C2.4): what it proves, its spec sections, whether it is automated, and the matching findings in the current report.",
+      description: "Explain one Conform check or finding id (such as C3 or C2.4): what it proves, its spec sections, whether it is automated, why each of its findings fails and how to fix it (guide), and the matching findings in the current report.",
       effect: "read",
       inputSchema: {
         type: "object",

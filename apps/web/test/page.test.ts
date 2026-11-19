@@ -75,6 +75,9 @@ test("explain() answers check and finding ids and refuses unknown ones", async (
   assert.ok(byCheck.findingsInCurrentReport.length > 1);
   const byFinding = page.explain("C1.2") as { findingsInCurrentReport: Array<{ id: string; status: string }> };
   assert.deepEqual(byFinding.findingsInCurrentReport.map((f) => f.id), ["C1.2"]);
+  const c24 = page.explain("C2.4") as { explanation: string };
+  assert.match(c24.explanation, /C2\.4 fails when: .*first entry in tools\[\]/s);
+  assert.match(c24.explanation, /Fix: .*first in tools\[\]/);
   assert.equal(page.explain("Z9").ok, false);
   const planned = page.explain("C12") as { check: { automated: boolean } };
   assert.equal(planned.check.automated, false);
@@ -86,4 +89,5 @@ test("getState() is plain JSON", async () => {
   const state = page.getState();
   assert.deepEqual(JSON.parse(JSON.stringify(state)), state);
   assert.equal((state["report"] as { result: string }).result, "warn");
+  assert.match(String(state["urlRules"]), /folder that holds agent-manifest\.json, then the network name/);
 });

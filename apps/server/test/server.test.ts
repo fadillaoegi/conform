@@ -115,6 +115,7 @@ test("other sites' runtimes can call the MCP endpoint (reference runtime MCP cli
   const status = await client.callTool("badge_status", { url });
   assert.match(status, /PASS, state valid/);
   assert.match(await client.callTool("explain_check", { id: "C7.1" }), /^C7 Key never leaves \(automated/);
+  assert.match(await client.callTool("explain_check", { id: "C2.4" }), /C2\.4 fails when: .*first entry in tools\[\].* Fix: .*first in tools\[\]/s);
   assert.match(await client.callTool("check_site", { url: "not a url" }), /^MCP tool error: /);
 });
 

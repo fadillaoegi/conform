@@ -1,7 +1,7 @@
 // The page object: the single source of state and operations for the Conform page. The page's own
 // form and the assistant's website_* actions both call these methods, so they follow one set of rules.
 
-import { CATALOG, checkInfo, checkNetwork, compactReport, parseInput, type CheckOptions, type CheckResult, type CompactReport, type Report } from "@conform/core";
+import { CATALOG, checkInfo, checkNetwork, findingGuides, compactReport, parseInput, type CheckOptions, type CheckResult, type CompactReport, type Report } from "@conform/core";
 
 export { compactReport, type CompactReport } from "@conform/core";
 
@@ -92,9 +92,20 @@ export class ConformPage {
     }
   }
 
+  /** Which URLs this page can check, stated as a fact so the assistant never has to guess. */
+  urlRules(): string {
+    const host = (globalThis as { location?: { hostname?: string } }).location?.hostname ?? "";
+    const local = host === "localhost" || host === "127.0.0.1" || host === "[::1]";
+    const format = "Give a network URL: the folder that holds agent-manifest.json, then the network name (for example https://example.org/agents/assistant when https://example.org/agents/agent-manifest.json exists), or a site folder ending in /.";
+    return local
+      ? `Conform is running on this machine, so it can check https sites and local http sites (http://localhost:<port>, http://127.0.0.1:<port>). ${format}`
+      : `This page checks https sites; its security policy refuses plain http URLs. ${format}`;
+  }
+
   /** Plain JSON for the assistant: what the checker shows right now. */
   getState(): Record<string, unknown> {
     return {
+      urlRules: this.urlRules(),
       checkerInput: this.state.input,
       running: this.state.running,
       report: this.state.report ? compactReport(this.state.report) : null,
@@ -116,6 +127,13 @@ export class ConformPage {
       .filter((f) => (findingId.includes(".") ? f.id === findingId : f.id.startsWith(`${info.id}.`)))
       .slice(0, 10)
       .map((f) => ({ id: f.id, status: f.status, message: clip(f.message), fix: f.suggestion ? clip(f.suggestion) : undefined, spec: f.spec }));
-    return { ok: true, check: info, findingsInCurrentReport: findings };
+    const guide = findingGuides(id);
+    // A ready-made answer: small models relay text more faithfully than they rebuild it from fields.
+    const explanation = [
+      `${info.id} ${info.name} (${info.automated ? "automated" : "planned"}; spec ${info.spec.join(", ")}): ${info.proves}`,
+      ...guide.map((g) => `${g.id} fails when: ${g.why}\nFix: ${g.fix}`),
+      ...findings.map((f) => `In the current report, ${f.id} is ${f.status}: ${f.message}`),
+    ].join("\n\n");
+    return { ok: true, explanation, check: info, guide, findingsInCurrentReport: findings };
   }
 }

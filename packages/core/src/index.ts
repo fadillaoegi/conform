@@ -116,6 +116,6 @@ export { fetchArtifact, evaluateCors } from "./fetcher.ts";
 export { summarize } from "./report.ts";
 export { SPEC, RUNTIME, CONFORM_VERSION } from "./spec.ts";
 export type * from "./types.ts";
-export { CATALOG, checkInfo, type CheckInfo } from "./catalog.ts";
+export { CATALOG, checkInfo, findingGuides, FINDING_GUIDE, type CheckInfo, type FindingGuide } from "./catalog.ts";
 export { compactReport, compactText, type CompactReport, type CompactCheck, type CompactFinding } from "./compact.ts";
 export { canonicalJson, type BadgePayload, type SignedBadge, type BadgeState } from "./badge-format.ts";

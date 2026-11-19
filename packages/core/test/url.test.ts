@@ -28,3 +28,17 @@ test("query strings and non-http inputs are problems", () => {
   assert.ok(parseInput("ftp://site.example/net").problems.length === 1);
   assert.ok(parseInput("not a url").problems.length === 1);
 });
+
+import { CATALOG, findingGuides, FINDING_GUIDE } from "../src/catalog.ts";
+
+test("every finding guide belongs to an automated check and has a cause and a fix", () => {
+  const automated = new Set(CATALOG.filter((c) => c.automated).map((c) => c.id));
+  for (const [id, guide] of Object.entries(FINDING_GUIDE)) {
+    assert.match(id, /^C\d+\.\d+$/);
+    assert.ok(automated.has(id.split(".")[0] as string), id);
+    assert.ok(guide.why.length > 20 && guide.fix.length > 10, id);
+  }
+  assert.match(findingGuides("c2.4")[0]?.fix ?? "", /first in tools\[\]/);
+  assert.ok(findingGuides("C3").length >= 5);
+  assert.deepEqual(findingGuides("C2.99"), []);
+});

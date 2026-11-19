@@ -22,6 +22,10 @@ apps/web/public/agent-mcp.json
 apps/web/public/.well-known/
 apps/web/public/bridge/
 apps/web/agent/generated/
+submission/*.mp4
+submission/stills/
+submission/video/public/*.wav
+.remotion/
 
 # Environment & Secrets
 .env
