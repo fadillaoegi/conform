@@ -1,0 +1,78 @@
+{
+  "brand": "Waypoint Desk",
+  "networks": [
+    {
+      "name": "waypoint_desk",
+      "front_man": "waypoint_concierge",
+      "hocon": "./waypoint_desk.network.json",
+      "description": "Plan a stay with our partner sites. Every partner's agent is checked with Conform before we hand you over.",
+      "tags": [
+        "travel",
+        "agentified-website"
+      ],
+      "sample_queries": [
+        "Which partners do you work with?",
+        "Is Tidewhistle Guesthouse safe to call? Check it first, then ask what rooms it offers.",
+        "Can you book a room for me?"
+      ]
+    }
+  ],
+  "llm_router": {
+    "base_url": "https://api.otari.ai/api/v1",
+    "mock": false,
+    "byok_router": "https://api.otari.ai/api/v1"
+  },
+  "allowed_peers": [
+    "{{CONFORM_ORIGIN}}",
+    "{{PARTNER_ORIGIN}}"
+  ],
+  "peer_policy": {
+    "mode": "closed",
+    "deny_origins": [],
+    "note": "Calls Conform and the partner sites in allowed_peers, each after the visitor agrees."
+  },
+  "agent_mcp": {
+    "protocol": "nsdeploy-agent-mcp/v1",
+    "network": "waypoint_desk",
+    "front_man": "waypoint_concierge",
+    "available": false,
+    "reason": "This is a static bundle; a public MCP facade requires an application host."
+  },
+  "theme": {
+    "primary": "#8a3b12"
+  },
+  "linking": {
+    "protocol": "nsdeploy-link/v1",
+    "exports": [
+      {
+        "network": "waypoint_desk",
+        "front_man": "waypoint_concierge",
+        "aliases": [
+          "waypoint_desk",
+          "waypoint_concierge"
+        ],
+        "url": "waypoint_desk"
+      }
+    ],
+    "imports": [],
+    "link_updates": {
+      "mode": "browser-local"
+    }
+  },
+  "deployment": {
+    "mode": "static",
+    "self_contained_runtime": true,
+    "browser_mock": false,
+    "direct_byok": true,
+    "direct_mcp_requires_cors": true,
+    "public_mcp_facade": false
+  },
+  "actions": {
+    "version": 1,
+    "module": "./site-actions.js",
+    "bridge": "./bridge/action-bridge.html",
+    "agentTools": [
+      "get_desk_state"
+    ]
+  }
+}

@@ -7,12 +7,14 @@
   "type": "module",
   "exports": {
     "./runtime/*": "./runtime/*",
-    "./skill/*": "./skill/*"
+    "./skill/*": "./skill/*",
+    "./scripts/*": "./scripts/*"
   },
   "files": [
     "runtime",
     "skill",
     "HASHES.sha256",
-    "UPSTREAM.md"
+    "UPSTREAM.md",
+    "scripts"
   ]
 }

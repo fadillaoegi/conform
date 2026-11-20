@@ -49,6 +49,8 @@ coverage/
 
 # Temporary & Cache
 .tmp/
+# The GitHub Action runs the committed bundle.
+!action/dist/
 tmp/
 temp/
 .cache/

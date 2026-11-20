@@ -1,9 +1,10 @@
 // The `conform` command, as a function that tests can call without a child process.
 
-import { writeFile } from "node:fs/promises";
+import { appendFile, writeFile } from "node:fs/promises";
 import { checkNetwork, CONFORM_VERSION, SPEC, type CheckOptions, type Report } from "@conform/core";
 import { parseArgs, USAGE, UsageError, type CheckArgs } from "./args.ts";
 import { formatReport } from "./format.ts";
+import { formatMarkdown } from "./markdown.ts";
 
 export interface Io {
   stdout: (text: string) => void;
@@ -67,6 +68,14 @@ export async function run(argv: string[], io: Io): Promise<number> {
       return 2;
     }
   }
+  if (args.summary) {
+    try {
+      await appendFile(args.summary, formatMarkdown(report), "utf8");
+    } catch (error) {
+      io.stderr(`conform: cannot write ${args.summary}: ${error instanceof Error ? error.message : String(error)}`);
+      return 2;
+    }
+  }
   io.stdout(args.json ? json : formatReport(report, { color: useColor(args, io), evidence: args.evidence, problemsOnly: args.problemsOnly }));
   if (args.out && !args.json) io.stderr(`conform: JSON report written to ${args.out}`);
   return exitCodeFor(report, args.failOn);
@@ -74,3 +83,4 @@ export async function run(argv: string[], io: Io): Promise<number> {
 
 export { parseArgs, USAGE } from "./args.ts";
 export { formatReport } from "./format.ts";
+export { formatMarkdown } from "./markdown.ts";

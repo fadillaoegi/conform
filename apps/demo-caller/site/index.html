@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Waypoint Desk · stays through partner agents you can trust</title>
+    <meta name="description" content="A travel desk that checks every partner's agent with Conform before it hands you over.">
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="desk.js"></script>
+    <script type="module" src="site.js"></script>
+  </head>
+  <body>
+    <header class="top">
+      <div class="brand"><span class="mark" aria-hidden="true">✦</span> Waypoint Desk</div>
+      <nav><a href="#partners">Partners</a><a href="#assistant">Ask the desk</a></nav>
+    </header>
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Travel desk · demo site</p>
+        <h1>Stays through partner agents<br>you can trust.</h1>
+        <p class="lede">We plan your stay by asking our partners' own AI agents. Before we hand anything to a partner, we ask <strong>Conform</strong> whether that partner's agent follows the open agentic web spec. No pass, no hand-off.</p>
+      </section>
+
+      <section id="partners" class="partners" aria-labelledby="partners-title">
+        <h2 id="partners-title">Our partners</h2>
+        <ul id="partner-list"></ul>
+        <p class="note"><span class="seal" aria-hidden="true"></span>Every hand-off is checked by Conform first, and you approve each contact on a card before anything is sent.</p>
+      </section>
+
+      <section id="assistant" class="assistant" aria-labelledby="assistant-heading">
+        <h2 id="assistant-heading">Ask the desk</h2>
+        <p>Ask which partners we work with, or ask us to check a partner with Conform and then find out what it offers.</p>
+        <p class="assistant-note">Your messages go to the LLM provider you choose in the settings below. You approve every contact with another site on a card first.</p>
+        <p id="assistant-status" role="status">Connecting the assistant… If this message stays, the assistant could not load. You can still read the page.</p>
+        <div id="agent-app">
+          <div data-ns-slot="header"></div>
+          <div class="assistant-panels">
+            <div data-ns-slot="chat"></div>
+            <div data-ns-slot="agents"></div>
+          </div>
+          <div data-ns-slot="settings"></div>
+        </div>
+      </section>
+    </main>
+    <footer class="foot">Waypoint Desk is a fictional demo site for Conform. Bookings are not real.</footer>
+  </body>
+</html>

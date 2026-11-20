@@ -2,6 +2,24 @@
 
 Deadline: 11 January 2027, 16:00 UTC (23:00 WIB). Target submission: 10 January, 21:00 WIB.
 
+## 2026-11-19 — session 8: demo caller, npm package, GitHub Action, video script
+
+- `apps/demo-caller` (Waypoint Desk): an agentic site built the agentify-website way that calls Conform's
+  `conform_check` before handing off to a partner (Tidewhistle Guesthouse). Builds with the skill's checker with
+  no warnings; the organizers' `check_partner.mjs` (now vendored in `packages/reference-runtime/scripts/`)
+  accepts Conform as its partner. End-to-end test across three sites (Waypoint Desk, a real Conform server
+  process with MCP, the guesthouse): two consent cards in order, nothing sent before each card, a decline sends
+  nothing, the key only at the router. Locally served on http://[::1]:8096 (three host names, so the loopback
+  key cookie never crosses sites).
+- `packages/cli` is publishable as `agentic-web-conformance` (name free on npm on 2026-11-19): an esbuild bundle
+  (core + pinned runtime inlined, LangChain runner stubbed), 80.6 kB packed, 7 files, no dependencies; installed
+  offline from the tarball in an empty project and run with npx. New `--summary` (Markdown) option.
+- `action/`: composite GitHub Action running the committed bundle (`action/dist`), with job summary and
+  outputs; simulated locally (pass exits 0, fail exits 1, outputs written).
+- `submission/VIDEO-SCRIPT.md`: storyboard and narration for a 1:52 video.
+- Tests: 84 pass (core 34, server 22, web 7, CLI 19, demo 2).
+- Not done (needs the user): publish to npm (account), push the repo (user's task), deploy.
+
 ## 2026-11-18 — session 7: video intro and closing
 
 - `submission/`: `intro.mp4` and `outro.mp4` (8 s each, 1080p30, AAC stereo), rendered with Remotion 4.0.539

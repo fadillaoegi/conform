@@ -94,3 +94,20 @@ test("--color forces ANSI colors", async () => {
   await run(["check", `${site.base}/${NET}`, "--static-only", "--color"], io);
   assert.match(out.join("\n"), /\u001b\[32m/);
 });
+
+test("--summary appends a Markdown report with the fixes", async () => {
+  const dir = await mkdtemp(path.join(tmpdir(), "conform-md-"));
+  try {
+    const file = path.join(dir, "summary.md");
+    const { site } = await pizzaStub();
+    site.strip("agent-manifest.json", "access-control-allow-origin");
+    const { io } = capture(site.fetch());
+    assert.equal(await run(["check", `${site.base}/${NET}`, "--static-only", "--summary", file], io), 1);
+    const md = await readFile(file, "utf8");
+    assert.match(md, /^## ❌ Conform: FAIL for `https:\/\/pizza\.example\/pizza_restaurant_website_assistant`/);
+    assert.match(md, /\| C1 Manifest.* \| ❌ fail \| C1\.2, C1\.7 \|/);
+    assert.match(md, /- ❌ \*\*C1\.2\*\* .*<br>Fix: Serve agent-manifest\.json with Access-Control-Allow-Origin/);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});

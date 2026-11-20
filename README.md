@@ -44,8 +44,11 @@ Conform fills that gap:
   badges bound to the SHA-256 of the manifest and network (they turn *stale* when the site changes), a public
   key for anyone to verify them, a searchable directory of badged sites, and an MCP endpoint
   (`check_site`, `badge_status`, `explain_check`) for other sites' runtimes. Guarded against SSRF.
-- **Community tools**: an npm package with a `conform check <url>` CLI (`packages/cli`, working), and a
-  GitHub Action that checks a site on every push (`action/`, planned).
+- **Community tools**: the npm package `agentic-web-conformance` (`packages/cli`: a `conform check <url>` CLI and
+  a JavaScript API, bundled with no dependencies, ready to publish) and a GitHub Action (`action/`) that checks a
+  site on every push and writes the report to the job summary.
+- **A demo caller** (`apps/demo-caller`, Waypoint Desk): a small agentic website that asks Conform before it
+  calls a partner's agent, showing other sites calling Conform across origins.
 
 ## Screenshots
 
@@ -57,7 +60,7 @@ Conform fills that gap:
 
 ## Status
 
-Application complete: checks C1–C9, CLI, site, assistant, badges, directory and MCP, all tested (79 tests).
+Application complete: checks C1–C9, CLI, site, assistant, badges, directory and MCP, all tested (84 tests).
 Conform passes its own checks, also in Docker behind Caddy. Not yet hosted publicly.
 [docs/PROGRESS.md](docs/PROGRESS.md), [docs/TEST-MATRIX.md](docs/TEST-MATRIX.md),
 [docs/SPEC-NOTES.md](docs/SPEC-NOTES.md) and [docs/SAMPLE-REPORT.md](docs/SAMPLE-REPORT.md).
@@ -164,7 +167,9 @@ packages/reference-runtime/ pinned copy of the skill's browser runtime + SHA-256
 packages/cli/               the `conform` CLI (npm package agentic-web-conformance)
 apps/web/                   the Conform site (Vite + TS, pixel theme), its two agent networks, deploy configs
 apps/server/                badges (Ed25519), directory, MCP endpoint, static serving; Clean Architecture (see its README)
-action/                     (next) GitHub Action
+apps/demo-caller/           Waypoint Desk, a demo site that calls Conform before it calls a partner
+action/                     GitHub Action (runs the bundled CLI in action/dist)
+submission/                 video intro and closing (Remotion), stills, video script
 fixtures/upstream/          pinned committee examples + serve_site.mjs, used by the tests
 docs/                       progress, test matrix, spec notes, sample report
 ```

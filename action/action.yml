@@ -1,0 +1,53 @@
+name: Conform agentic web check
+description: Check an agentic website against the Worldwide Agentic Web MVP spec (manifest, CORS, data-only network, fail-closed limits, key and private-context isolation, consent).
+author: Conform contributors
+branding:
+  icon: check-square
+  color: green
+inputs:
+  url:
+    description: Network URL to check (the folder that holds agent-manifest.json, then the network name), or a site folder ending in /.
+    required: true
+  fail-on:
+    description: Fail the step on "fail" (default) or on "warn" and worse.
+    required: false
+    default: fail
+  static-only:
+    description: Run only the static checks C1 to C3.
+    required: false
+    default: "false"
+  origin:
+    description: Caller origin to evaluate CORS against (default https://conform.example).
+    required: false
+    default: ""
+  node-version:
+    description: Node.js version to set up (24 or newer).
+    required: false
+    default: "24"
+outputs:
+  result:
+    description: Overall result, pass, warn or fail.
+    value: ${{ steps.check.outputs.result }}
+  fail:
+    description: Number of failing findings.
+    value: ${{ steps.check.outputs.fail }}
+  warn:
+    description: Number of warnings.
+    value: ${{ steps.check.outputs.warn }}
+  report:
+    description: Path of the JSON report.
+    value: ${{ steps.check.outputs.report }}
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+    - id: check
+      shell: bash
+      env:
+        CONFORM_URL: ${{ inputs.url }}
+        CONFORM_FAIL_ON: ${{ inputs.fail-on }}
+        CONFORM_STATIC_ONLY: ${{ inputs.static-only }}
+        CONFORM_ORIGIN: ${{ inputs.origin }}
+      run: bash "$GITHUB_ACTION_PATH/run.sh"

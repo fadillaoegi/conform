@@ -15,6 +15,18 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  apps/demo-caller:
+    devDependencies:
+      '@conform/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@conform/reference-runtime':
+        specifier: workspace:*
+        version: link:../../packages/reference-runtime
+      '@conform/server':
+        specifier: workspace:*
+        version: link:../server
+
   apps/server:
     dependencies:
       '@conform/core':
@@ -45,10 +57,13 @@ importers:
         version: 7.3.8(@types/node@24.19.2)(terser@5.51.2)
 
   packages/cli:
-    dependencies:
+    devDependencies:
       '@conform/core':
         specifier: workspace:*
         version: link:../core
+      esbuild:
+        specifier: ^0.28.1
+        version: 0.28.2
 
   packages/core:
     dependencies:

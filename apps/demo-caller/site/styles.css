@@ -1,0 +1,45 @@
+:root { --paper: #f6efe3; --card: #fffaf2; --ink: #2b1d14; --muted: #6b5646; --rust: #8a3b12; --teal: #1f6f5c; --line: #e0d2bd; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.55 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+a { color: var(--rust); }
+.top { display: flex; justify-content: space-between; align-items: center; padding: 18px max(16px, calc((100vw - 1040px) / 2)); border-bottom: 1px solid var(--line); background: var(--card); }
+.brand { font-weight: 700; font-size: 20px; letter-spacing: 0.3px; }
+.mark { color: var(--rust); }
+nav a { margin-left: 18px; text-decoration: none; font: 600 14px/1 system-ui, sans-serif; color: var(--muted); }
+main { max-width: 1040px; margin: 0 auto; padding: 32px 16px 56px; }
+.hero h1 { font-size: 44px; line-height: 1.12; margin: 8px 0 16px; }
+.eyebrow { font: 600 12px/1 system-ui, sans-serif; text-transform: uppercase; letter-spacing: 2px; color: var(--teal); margin: 0; }
+.lede { max-width: 62ch; color: var(--muted); font-size: 19px; }
+.partners { margin-top: 40px; }
+.partners h2, .assistant h2 { font-size: 26px; margin: 0 0 14px; }
+#partner-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.partner { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+.partner h3 { margin: 0 0 6px; font-size: 20px; }
+.partner p { margin: 6px 0; color: var(--muted); font-size: 16px; }
+.partner code { font: 13px/1.4 ui-monospace, Menlo, monospace; background: #f1e6d4; padding: 2px 6px; border-radius: 6px; overflow-wrap: anywhere; }
+.note { display: flex; gap: 10px; align-items: center; margin-top: 16px; color: var(--teal); font: 600 15px/1.4 system-ui, sans-serif; }
+.seal { width: 14px; height: 14px; background: #38b764; box-shadow: 0 0 0 3px #a7f070; flex: none; }
+
+/* Assistant (from the agentify-website skill's assistant.css, in this site's palette). */
+.assistant { margin-top: 48px; }
+.assistant-note { color: var(--muted); font-size: 15px; }
+#assistant-status { font: 600 14px/1.4 system-ui, sans-serif; color: var(--teal); }
+#agent-app {
+  --ns-font: system-ui, sans-serif; --ns-bg: #fffaf2; --ns-fg: #2b1d14; --ns-primary: #8a3b12; --ns-accent: #1f6f5c;
+  --ns-border: #e0d2bd; --ns-panelbg: #fffaf2; --ns-msgbg: #f3e8d6; --ns-muted: #6b5646;
+}
+.assistant-panels { display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: 16px; margin-top: 16px; }
+#agent-app.ns-composed-app [data-ns-slot="chat"] { height: 640px; }
+#agent-app .ns-chat { background: var(--ns-bg); }
+#agent-app input[type="checkbox"], #agent-app input[type="radio"] { width: auto; }
+#agent-app .ns-header { flex-wrap: wrap; }
+#agent-app button { margin: 0; }
+#agent-app .ns-consent { background: #fff4d6; }
+#agent-app .ns-msgs:has(.ns-consent-actions) > .ns-turn-status { display: none; }
+#agent-app .ns-msg { overflow-wrap: break-word; }
+#agent-app .ns-consent-actions { flex-wrap: wrap; }
+#agent-app .ns-consent-actions button { white-space: nowrap; }
+body > dialog h2 { margin: 0 0 12px; font: 700 1.25em system-ui, sans-serif; }
+body > dialog button { margin-right: 8px; }
+.foot { max-width: 1040px; margin: 0 auto; padding: 24px 16px 40px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
+@media (max-width: 760px) { .hero h1 { font-size: 32px; } .assistant-panels { grid-template-columns: 1fr; } }

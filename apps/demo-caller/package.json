@@ -1,0 +1,20 @@
+{
+  "name": "@conform/demo-caller",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Waypoint Desk: a small agentic website (built the agentify-website way) that checks every partner agent with Conform before it hands off. Demonstrates other sites calling Conform's conform_check network.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check-network": "node scripts/build.mjs --check",
+    "serve": "pnpm run build && node ../../fixtures/upstream/serve_site.mjs dist --host ::1 --port 8096 --open-as [::1]",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --conditions=conform-source --test --test-concurrency=1 \"test/**/*.test.ts\""
+  },
+  "devDependencies": {
+    "@conform/reference-runtime": "workspace:*",
+    "@conform/server": "workspace:*",
+    "@conform/core": "workspace:*"
+  }
+}

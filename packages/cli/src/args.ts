@@ -7,6 +7,7 @@ export interface CheckArgs {
   url: string;
   json: boolean;
   out: string | null;
+  summary: string | null;
   staticOnly: boolean;
   origin: string | null;
   timeoutMs: number | null;
@@ -29,6 +30,7 @@ manifest URL itself.
 Options:
   --json               Print the full JSON report instead of text.
   --out <file>         Also write the JSON report to <file>.
+  --summary <file>     Also append a Markdown summary to <file> (for example $GITHUB_STEP_SUMMARY).
   --static-only        Run only the static checks (C1-C3); skip the runtime harness.
   --origin <origin>    The caller origin to evaluate CORS against (default https://conform.example).
   --timeout <ms>       Timeout per artifact request (default 15000).
@@ -43,7 +45,7 @@ Exit codes: 0 no failing finding, 1 a finding at or above --fail-on, 2 bad usage
 
 export class UsageError extends Error {}
 
-const VALUE_OPTIONS = new Set(["--out", "--origin", "--timeout", "--fail-on"]);
+const VALUE_OPTIONS = new Set(["--out", "--summary", "--origin", "--timeout", "--fail-on"]);
 
 export function parseArgs(argv: string[]): Args {
   if (argv.length === 0) throw new UsageError("Missing command.");
@@ -56,6 +58,7 @@ export function parseArgs(argv: string[]): Args {
     url: "",
     json: false,
     out: null,
+    summary: null,
     staticOnly: false,
     origin: null,
     timeoutMs: null,
@@ -71,6 +74,7 @@ export function parseArgs(argv: string[]): Args {
       if (value === undefined || value.startsWith("--")) throw new UsageError(`${arg} needs a value.`);
       i += 1;
       if (arg === "--out") args.out = value;
+      else if (arg === "--summary") args.summary = value;
       else if (arg === "--origin") {
         let url: URL;
         try {

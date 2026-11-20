@@ -5,26 +5,41 @@
   "license": "Apache-2.0",
   "type": "module",
   "bin": {
-    "conform": "./dist/bin.js"
+    "conform": "./dist-bundle/conform.mjs"
   },
   "exports": {
     ".": {
-      "conform-source": "./src/run.ts",
-      "types": "./dist/run.d.ts",
-      "default": "./dist/run.js"
+      "conform-source": "./src/index.ts",
+      "default": "./dist-bundle/index.mjs"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist-bundle",
+    "README.md",
+    "LICENSE"
+  ],
   "engines": {
     "node": ">=24"
   },
-  "keywords": ["agentic-web", "conformance", "neuro-san", "nsdeploy", "mcp", "cors", "cli"],
+  "keywords": [
+    "agentic-web",
+    "conformance",
+    "neuro-san",
+    "nsdeploy",
+    "mcp",
+    "cors",
+    "cli"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "node --conditions=conform-source --test \"test/**/*.test.ts\""
+    "test": "node --conditions=conform-source --test \"test/**/*.test.ts\"",
+    "bundle": "node scripts/bundle.mjs",
+    "prepack": "node scripts/bundle.mjs"
   },
-  "dependencies": {
-    "@conform/core": "workspace:*"
+  "dependencies": {},
+  "devDependencies": {
+    "@conform/core": "workspace:*",
+    "esbuild": "^0.28.1"
   }
 }

@@ -73,6 +73,6 @@ export function formatReport(report: Report, options: FormatOptions): string {
   ];
   out.push(`${paint(c, "bold", "Result")}  ${statusTag(c, summary.worst)}  ${parts.join(" · ")}`);
   const ran = report.checks.map((x) => x.id).join(" ");
-  out.push(paint(c, "dim", `Checks run: ${ran || "none"}. Not yet automated: C10 runtime fingerprint to C14 BYOK panel (see docs/TEST-MATRIX.md).`));
+  out.push(paint(c, "dim", `Checks run: ${ran || "none"}. Not yet automated: C10 runtime fingerprint to C14 BYOK panel.`));
   return out.join("\n");
 }
